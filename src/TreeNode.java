@@ -1,3 +1,4 @@
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Stack;
@@ -75,6 +76,12 @@ public class TreeNode {
 	    }
 	}
 	return result;
+    }
+    public ArrayList<TreeNode> getChildren(){
+    	return this.children;
+    }
+    public void addChild(TreeNode child){
+    	this.children.add(child);
     }
     //remove?
     public void print(PrintWriter pen)
