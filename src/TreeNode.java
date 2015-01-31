@@ -58,7 +58,7 @@ public class TreeNode {
 	}
     }
    
-    public String toString()
+  /*  public String toString()
     {
 	String result = "";
 	return toStringHelper(this, result, "");
@@ -77,6 +77,7 @@ public class TreeNode {
 	}
 	return result;
     }
+    */
     public ArrayList<TreeNode> getChildren(){
     	return this.children;
     }
@@ -122,6 +123,7 @@ public class TreeNode {
       pen.println();
     } // print(PrintWriter)
 
+
     public boolean equals(TreeNode other)
     {
 	//deal with null cases, maybe redundant
@@ -141,6 +143,19 @@ public class TreeNode {
 
     }// equlas
     
+    public String toString(){
+	String temp = "[" + this.val;
+	if(! this.children.isEmpty()){
+	for(TreeNode node : this.children)
+	{
+		temp += node.toString();
+	}
+	}
+	
+	temp += "]";
+	return temp;
+}
+
     public static void main(String[] args) {
 	TreeNode result = new TreeNode("sum");
 	result.addChild("x");

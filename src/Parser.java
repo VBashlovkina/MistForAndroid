@@ -113,8 +113,8 @@ public class Parser {
   pen.println(Arrays.toString(copyOfRangeTest));
   
   TreeNode root = parser(input);
-  pen.println(root.getChildren());
-    }
+  //root.print(root);
+  pen.println(root.getChildren());   }
 
 }
 
