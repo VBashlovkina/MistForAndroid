@@ -1,4 +1,6 @@
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Stack;
 
 
 public class TreeNode {
@@ -10,7 +12,6 @@ public class TreeNode {
     public TreeNode(String str)
     {
 	val = str;
-	
 	children = new ArrayList<>();
     }//TreeNode
     
@@ -55,8 +56,65 @@ public class TreeNode {
 	    print(t);
 	}
     }
-    //remove?
+   
+    public String toString()
+    {
+	String result = "";
+	return toStringHelper(this, result, "");
+    }//toString
     
+    String toStringHelper(TreeNode root, String result, String indent)
+    {   
+	result += indent + root.val + "\n";
+	if (root.hasChildren()) //not a leaf
+	{
+	    indent += " ";
+	    for (TreeNode t : root.children)
+	    {
+		toStringHelper(t, result, indent);
+	    }
+	}
+	return result;
+    }
+    //remove?
+    public void print(PrintWriter pen)
+    {
+      // A collection of the remaining things to print
+      Stack<Object> remaining = new Stack<Object>();
+      
+      remaining.push(this);
+      remaining.push(this.val);
+      // Invariants:
+      // remaining only contains Strings or BSTNodes
+      // All key/value pairs in the tree are either
+      // (a) already printed
+      // (b) in remaining
+      // (c) in or below a node in remaining
+      while (!remaining.isEmpty())
+        {
+          Object next = remaining.pop();
+          if (next instanceof String)
+            {
+              pen.print(next);
+              pen.print(" ");
+            } // if it's a string
+          else
+            {
+              // next must be a BSTNode
+              @SuppressWarnings("unchecked")
+              TreeNode node = (TreeNode) next;
+              if (node.hasChildren()){
+              for (TreeNode t : node.children)
+              {
+        	  remaining.push(t);
+        	  remaining.push(t.val);
+              }
+            } // if it's a node
+            }
+        } // while
+      pen.println();
+    } // print(PrintWriter)
+
     public boolean equals(TreeNode other)
     {
 	//deal with null cases, maybe redundant
@@ -80,7 +138,8 @@ public class TreeNode {
 	TreeNode result = new TreeNode("sum");
 	result.addChild("x");
 	result.addChild("y");
-	print(result);
+	PrintWriter pen = new PrintWriter(System.out, true);
+	result.print(pen);
 
     }
 
