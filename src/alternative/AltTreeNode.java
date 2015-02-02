@@ -1,9 +1,5 @@
 package alternative;
 
-
-
-
-
 import java.util.ArrayList;
 
 public class AltTreeNode {
@@ -16,19 +12,20 @@ public class AltTreeNode {
     {
 	val = str;
 	children = new ArrayList<>();
-    }//TreeNode
+    }//AltTreeNode(String)
     
-	public AltTreeNode(String str, AltTreeNode par)
-	{
-		val = str;
-		parent= par;
-		children = new ArrayList<>();
-	}
+    public AltTreeNode(String str, AltTreeNode par) 
+    {
+	val = str;
+	parent = par;
+	children = new ArrayList<>();
+    }// AltTreeNode(String, AltTreeNode)
+    
     public void addChild(String child)
     {
     	this.children.add(new AltTreeNode(child, this));
 	
-    }// addChild
+    }//addChild
     
     public int numChildren()
     {
@@ -37,30 +34,26 @@ public class AltTreeNode {
     
     public boolean hasChildren()
     {
-	if (children.size() > 0)
-	    return true;
-	return false;
+	return children.size() > 0;
     }//hasChildren
-    
-    
+        
     public String toString()
     {
-	String result = "";
-	return toStringHelper(this, result, "");
+	return toStringHelper(this, "");
     }//toString
     
-    String toStringHelper(AltTreeNode root, String result, String indent)
+    String toStringHelper(AltTreeNode root, String indent)
     {   
-    	String res = indent + root.val + "\n";
-	//result += indent + root.val + "\n";
+    	String result = indent + root.val + "\n";
     	if (root.hasChildren()) //not a leaf
     	{
-    		indent += "  ";
+    		indent += "\t";
     		for (AltTreeNode t : root.children)
-	    
-    			res += toStringHelper(t, result, indent);
+    			result += toStringHelper(t, indent);
     	}
-    	return res;
-	}
+    	return result;
+    }// toStringHelper
     
-}// class
+    
+    
+}// class AltTreeNode
