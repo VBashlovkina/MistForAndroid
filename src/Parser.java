@@ -18,6 +18,7 @@ public class Parser {
     */
   public static TreeNode parser(String input){
     String [] splitArray = input.split("\\(");
+    System.out.println("Array in parser :" + Arrays.toString(splitArray));
     int index = 0;
     TreeNode root = new TreeNode(splitArray[index++]);
     return parser(splitArray,root,index).getNode();
@@ -33,8 +34,11 @@ public class Parser {
    */
   
   private static ParseData parser(String [] splitArray, TreeNode root, int index){
-    String tempHolder  = splitArray[index++];
+     System.out.println("Index:" + index);
+      String tempHolder  = splitArray[index++];
+    System.out.println("parser Helper tempHolder :" + tempHolder);
     String [] children = tempHolder.split("[,\\)]");
+    System.out.println("parser Helper children :" + Arrays.toString(children));
     TreeNode childNode = null;
     //add each element to root as a node
        for( int i = 0; i<children.length;i++){
@@ -48,6 +52,7 @@ public class Parser {
          }//add child notdes to root
        }//for 
     //populate remaining of child trees
+     if(index < splitArray.length){
     ParseData fromChild = parser(splitArray, childNode,index);
     String [] dataLeft = fromChild.getStringArray();
     if( dataLeft !=null){
@@ -62,6 +67,7 @@ public class Parser {
          }//add child notdes to root
        }//for
     }
+     }
     return new ParseData(root,null);
   }//parser(String [], TreeNode,int)
   
@@ -103,6 +109,8 @@ public class Parser {
     public static void main(String[] args) {
     PrintWriter pen = new PrintWriter(System.out,true);
   String input = "rgb(sq(sum(x,y,t.s)),t.s,y)";
+   // String input = "rgb(mult(sign(wsum(sin(neg(mult(y, x))), wsum(t.s, square(cos(y))))), wsum(t.s, square(cos(y)))), sign(wsum(sin(neg(mult(y, x))), wsum(t.s, square(cos(y))))), sin(neg(mult(y, x))))";
+   // String input = "rgb(t.s,y,sq(sum(x,y,t.s)))";
   String [] splitArray = input.split("\\(");
   pen.println(Arrays.toString(splitArray));
   String test  = splitArray[3];
@@ -113,8 +121,9 @@ public class Parser {
   pen.println(Arrays.toString(copyOfRangeTest));
   
   TreeNode root = parser(input);
-  //root.print(root);
-  pen.println(root.getChildren());   }
+  TreeNode.print(root);
+  pen.println(root);   
+  }
 
 }
 

@@ -34,18 +34,7 @@ public class TreeNode {
     }//hasChildren
     
     //iterator?
- // Print using a preorder traversal
-    /*
-    void printhelp(GTNode<E>* root) {
-    if (root->isLeaf()) cout << "Leaf: ";
-    else cout << "Internal: ";
-    cout << root->value() << "\n";
-    // Now process the children of "root"
-    for (GTNode<E>* temp = root->leftmostChild();
-    temp != NULL; temp = temp->rightSibling())
-    printhelp(temp);
-    }
-    */
+
     public static void print(TreeNode root)
     {
 	if (!root.hasChildren())
@@ -58,7 +47,7 @@ public class TreeNode {
 	}
     }
    
-  /*  public String toString()
+    public String toString()
     {
 	String result = "";
 	return toStringHelper(this, result, "");
@@ -66,18 +55,19 @@ public class TreeNode {
     
     String toStringHelper(TreeNode root, String result, String indent)
     {   
-	result += indent + root.val + "\n";
+	String res = indent + root.val + "\n";
+	//result += indent + root.val + "\n";
 	if (root.hasChildren()) //not a leaf
 	{
-	    indent += " ";
+	    indent += "  ";
 	    for (TreeNode t : root.children)
 	    {
-		toStringHelper(t, result, indent);
+		res += toStringHelper(t, result, indent);
 	    }
 	}
-	return result;
+	return res;
     }
-    */
+    
     public ArrayList<TreeNode> getChildren(){
     	return this.children;
     }
@@ -143,7 +133,7 @@ public class TreeNode {
 
     }// equlas
     
-    public String toString(){
+  /*  public String toString(){
 	String temp = "[" + this.val;
 	if(! this.children.isEmpty()){
 	for(TreeNode node : this.children)
@@ -155,6 +145,7 @@ public class TreeNode {
 	temp += "]";
 	return temp;
 }
+*/
 
     public static void main(String[] args) {
 	TreeNode result = new TreeNode("sum");
