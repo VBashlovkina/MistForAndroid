@@ -3,14 +3,15 @@ import java.io.PrintWriter;
 public class Tokenizer {
 
     char[] code;
-
     int index; // the char we haven't looked at yet
     String peeked;
+    boolean justPeeked;
 
     public Tokenizer(String code) {
 	this.code = code.toCharArray();
 	index = 0;
 	peeked = "";
+	justPeeked = false;
     }
 
     public boolean hasNext() {
@@ -18,13 +19,13 @@ public class Tokenizer {
     }
 
     public String next() {
-	if (peeked.isEmpty())
+	if (!justPeeked)
 	    this.peek();
 	index += peeked.length();
+	justPeeked = false;
 	return peeked;
     }
 
-   
     public String peek() {
 	// clear peeked
 	peeked = "";
@@ -32,15 +33,20 @@ public class Tokenizer {
 	char c;
 	if (this.hasNext()) {
 	    // Deal with single-char tokens
-	    c = code[index + i];
+	    
+	  
+	    //c = code[index + i];
+	    while(Character.isWhitespace(c = code[index + i])){
+		index++;
+	    }//while there is whitespace
 	    if (c == '(' || c == ')' || c == ',')
 		return (peeked = c + "");
 	    // otherwise, parse a word token
-	    while (index + i < code.length - 1 && (c = code[index + i]) != '('
+	    while (index + i < code.length  && (c = code[index + i]) != '('
 		    && c != ')' && c != ',') {
 		// discard whitespace but increment index to account for
 		// skipping
-		if (Character.isWhitespace(c))
+		if (Character.isWhitespace(c)) 
 		    index++;
 		else {
 		    peeked += c;
@@ -48,6 +54,7 @@ public class Tokenizer {
 		}
 	    }// while reading a word token
 	}// if
+	justPeeked = true;
 	return peeked;
     }// peek
 
@@ -68,6 +75,12 @@ public class Tokenizer {
 	    pen.println("Peeked at: " + t.peek());
 	    pen.println(" Next is: " + t.next());
 	}
+	Tokenizer p = new Tokenizer(test);
+	System.out.println("\n\n\n" + p.next()); // rgb
+	System.out.println(p.next()); // (
+	System.out.println(p.next()); // sq
+	System.out.println(p.peek()); // (
+
     }// main
 
 }// Tokenizer

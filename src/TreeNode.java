@@ -1,111 +1,93 @@
-
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Stack;
 
 
 public class TreeNode {
 
     String val;
-    //TreeNode[] children;
     ArrayList<TreeNode> children;
+
+    /* Constructor */
     
-    public TreeNode(String str)
-    {
+    public TreeNode(String str) {
 	val = str;
 	children = new ArrayList<>();
-    }//TreeNode
+    }// TreeNode
+
     
-    public void addChild(String child)
-    {
+    /* Adding children */ 
+    
+    public void addChild(String child) {
 	this.children.add(new TreeNode(child));
     }// addChild
+
+    public void addChild(TreeNode child) {
+	this.children.add(child);
+    }
     
-    public int numChildren()
-    {
+    /* Getters */
+    
+    public int numChildren() {
 	return children.size();
-    }//numChildren
-    
-    public boolean hasChildren()
-    {
+    }// numChildren
+
+    public boolean hasChildren() {
 	if (children.size() > 0)
 	    return true;
 	return false;
-    }//hasChildren
-    
-    //iterator?
+    }// hasChildren
 
-   
-    public String toString()
-    {
-	String result = "";
-	return toStringHelper(this, "");
-    }//toString
+    public ArrayList<TreeNode> getChildren() {
+	return this.children;
+    }
     
-    String toStringHelper(TreeNode root, String indent)
-    {   
+    /* Utility */
+    
+    // TODO 
+    public boolean equals(TreeNode other)
+    {
+	return this.toString().equals(other.toString());
+    } //hacked equals
+    
+    public String toString() {
+	return toStringHelper(this, "");
+    }// toString
+
+    String toStringHelper(TreeNode root, String indent) {
 	String result = indent + root.val + "\n";
-	//result += indent + root.val + "\n";
-	if (root.hasChildren()) //not a leaf
+	// result += indent + root.val + "\n";
+	if (root.hasChildren()) // not a leaf
 	{
 	    indent += "  ";
-	    for (TreeNode t : root.children)
-	    {
+	    for (TreeNode t : root.children) {
 		result += toStringHelper(t, indent);
 	    }
 	}
 	return result;
-    }
+    }// toString Helper
+
     
-    public ArrayList<TreeNode> getChildren(){
-    	return this.children;
-    }
-    public void addChild(TreeNode child){
-    	this.children.add(child);
-    }
-    //remove?
-   
-
-    public boolean equals(TreeNode other)
-    {
-	//deal with null cases, maybe redundant
-	/*if (this == null || other == null)
-	{
-	    if (this == other)
-		return true;
-	     return false;
-	}*/
-	
-	if (this.val == other.val && numChildren() == other.numChildren())
-	{
-	    for (int i = 0; i < numChildren(); i++)
-		return this.children.get(i).equals(other.children.get(i));
-	}
-	return false;
-
-    }// equlas
     
-  /*  public String toString(){
-	String temp = "[" + this.val;
-	if(! this.children.isEmpty()){
-	for(TreeNode node : this.children)
-	{
-		temp += node.toString();
-	}
-	}
-	
-	temp += "]";
-	return temp;
-}
-*/
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 	TreeNode result = new TreeNode("sum");
 	result.addChild("x");
 	result.addChild("y");
 	PrintWriter pen = new PrintWriter(System.out, true);
 	pen.println(result);
-
+	String test = "rgb(sq(sum(x,y)),x,y)";
+	String okay = "rgb(wsum(x, y, y, t.s), sum(sum(wsum(x, x, y, neg(t.s), x), wsum(y, y, x, neg(t.s), y)), sum(wsum(y, x, x, t.s), wsum(x, y, y, t.s))), sum(wsum(x, x, y, neg(t.s), x), wsum(y, y, x, neg(t.s), y)))";
+	TreeNode t = Parser.parse(okay);
+	String recParsed = t.toString();
+	String itParsed = AltParser.parse(okay).toString();
+	System.out.println(recParsed.equals(itParsed));
+	System.out.println(recParsed);
+	System.out.println(itParsed);
+	
+	//Parser.parse("");
+	TreeNode res = Parser.parse("x");
+	TreeNode correct = new TreeNode("x");
+	System.out.println(res);
+	
     }
 
 }
