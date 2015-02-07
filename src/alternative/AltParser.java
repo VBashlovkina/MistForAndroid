@@ -30,7 +30,7 @@ public class AltParser {
      *         appear in the code
      */
     static String[] magicSplit(String code) {
-	// Throw away the parens
+	// Throw away the commas
 	String[] commaSplit = code.split(",");
 	char[] withParens;
 	String withoutParens;
@@ -40,15 +40,17 @@ public class AltParser {
 	    withParens = str.toCharArray();
 	    withoutParens = "";
 	    for (int i = 0; i < withParens.length; i++) {
-		if ((c = withParens[i]) == '(' || c == ')') {
+		if ((c = withParens[i]) == '(' || c == ')' || c == ',') {
 		    // put the withoutParens so far into the ArrayList
 		    if (!withoutParens.equals(""))
 			result.add(new String(withoutParens));
 		    // clear without parens
 		    withoutParens = "";
-		    // put the paren into the arraylist, too
-		    result.add(c + "");
-		} else
+		    // put the paren into the arraylist, but skip commas
+		    if (c != ',')
+			result.add(c + "");
+		} 
+		else
 		    withoutParens += c;
 	    }// for each char
 

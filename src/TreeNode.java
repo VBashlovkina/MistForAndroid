@@ -35,37 +35,26 @@ public class TreeNode {
     
     //iterator?
 
-    public static void print(TreeNode root)
-    {
-	if (!root.hasChildren())
-	    System.out.println("Leaf "+root.val);
-	else
-	    System.out.println("Internal " + root.val);
-	for (TreeNode t : root.children)
-	{
-	    print(t);
-	}
-    }
    
     public String toString()
     {
 	String result = "";
-	return toStringHelper(this, result, "");
+	return toStringHelper(this, "");
     }//toString
     
-    String toStringHelper(TreeNode root, String result, String indent)
+    String toStringHelper(TreeNode root, String indent)
     {   
-	String res = indent + root.val + "\n";
+	String result = indent + root.val + "\n";
 	//result += indent + root.val + "\n";
 	if (root.hasChildren()) //not a leaf
 	{
 	    indent += "  ";
 	    for (TreeNode t : root.children)
 	    {
-		res += toStringHelper(t, result, indent);
+		result += toStringHelper(t, indent);
 	    }
 	}
-	return res;
+	return result;
     }
     
     public ArrayList<TreeNode> getChildren(){
@@ -75,44 +64,7 @@ public class TreeNode {
     	this.children.add(child);
     }
     //remove?
-    public void print(PrintWriter pen)
-    {
-      // A collection of the remaining things to print
-      Stack<Object> remaining = new Stack<Object>();
-      
-      remaining.push(this);
-      remaining.push(this.val);
-      // Invariants:
-      // remaining only contains Strings or BSTNodes
-      // All key/value pairs in the tree are either
-      // (a) already printed
-      // (b) in remaining
-      // (c) in or below a node in remaining
-      while (!remaining.isEmpty())
-        {
-          Object next = remaining.pop();
-          if (next instanceof String)
-            {
-              pen.print(next);
-              pen.print(" ");
-            } // if it's a string
-          else
-            {
-              // next must be a BSTNode
-              @SuppressWarnings("unchecked")
-              TreeNode node = (TreeNode) next;
-              if (node.hasChildren()){
-              for (TreeNode t : node.children)
-              {
-        	  remaining.push(t);
-        	  remaining.push(t.val);
-              }
-            } // if it's a node
-            }
-        } // while
-      pen.println();
-    } // print(PrintWriter)
-
+   
 
     public boolean equals(TreeNode other)
     {
@@ -152,7 +104,7 @@ public class TreeNode {
 	result.addChild("x");
 	result.addChild("y");
 	PrintWriter pen = new PrintWriter(System.out, true);
-	result.print(pen);
+	pen.println(result);
 
     }
 

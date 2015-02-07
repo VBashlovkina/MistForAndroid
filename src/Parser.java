@@ -9,6 +9,8 @@ import java.util.Arrays;
  */
 public class Parser {
 
+    
+    
    /**
     *  Parses the contents of the input string to a more usable tree-like
     *  structure.
@@ -121,7 +123,6 @@ public class Parser {
   pen.println(Arrays.toString(copyOfRangeTest));
   
   TreeNode root = parser(input);
-  TreeNode.print(root);
   pen.println(root);   
   }
 
