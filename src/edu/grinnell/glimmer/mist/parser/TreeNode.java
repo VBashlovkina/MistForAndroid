@@ -42,7 +42,7 @@ public class TreeNode {
 	return this.children;
     }
     
-    public String getTreeVal(){
+    public String getRootVal(){
       return this.val;
     }
     /* Utility */
