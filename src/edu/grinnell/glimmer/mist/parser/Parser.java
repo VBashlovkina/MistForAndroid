@@ -1,5 +1,8 @@
-import java.io.*;
-import java.util.*;
+
+package edu.grinnell.glimmer.mist.parser;
+import java.io.PrintWriter;
+import java.util.Arrays;
+
 
 /**
  * Main Parser

@@ -1,3 +1,4 @@
+package edu.grinnell.glimmer.mist.parser;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -41,6 +42,9 @@ public class TreeNode {
 	return this.children;
     }
     
+    public String getRootVal(){
+      return this.val;
+    }
     /* Utility */
     
     // TODO 
