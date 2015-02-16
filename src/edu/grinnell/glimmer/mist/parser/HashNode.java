@@ -32,8 +32,7 @@ public class HashNode {
 	
 	@Override
 	public String toString(){
-		String result ="";
-		result +="[ ("+this.nodeVal+") "+this.node.getRootVal()+" (";
+		String result ="[ ("+this.nodeVal+") "+this.node.getRootVal()+" (";
 		for(Integer num : this.childrenValues){
 			result += num +",";
 		}//for
@@ -41,6 +40,7 @@ public class HashNode {
 		return result;
 	}//toString()
 	
+	// TODO http://eclipsesource.com/blogs/2012/09/04/the-3-things-you-should-know-about-hashcode/
 	@Override 
 	public int hashCode(){
 	  int hash = 17;

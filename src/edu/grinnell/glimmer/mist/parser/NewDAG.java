@@ -36,6 +36,7 @@ public class NewDAG {
 			HashNode temp = new HashNode(child);
 			// If child is a leaf
 			if (child.isLeaf()) {
+			    	// If it isn't already in the map, add it
 				if (!table.map.containsKey(temp)) {
 					temp.nodeVal = table.availableNumber;
 					table.map.put(temp, table.availableNumber);
@@ -46,22 +47,23 @@ public class NewDAG {
 				// recurse the child and gather necessary data
 				temp = makeDAG(temp, table);
 			}// else child is not a leaf
-				// update root
+			
+			// update root: retrieve the new value of temp from the map
 			Integer val = table.map.get(temp);
+			// add it to root's children-arguments
 			root.childrenValues.add(val);
 		}// process children
 
-		// process root: push root to map and update number
+		// process root: put root into map and update number
 		if (!table.map.containsKey(root)) {
-			table.map.put(root, table.availableNumber);
+		    	root.nodeVal = table.availableNumber; 
+			table.map.put(root, root.nodeVal);
 			table.increment();
-			Integer val = table.map.get(root);
-			root.nodeVal = val;
 		}// if root not in map
 		return root;
 	}// makeDAG(TreeNode)
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		PrintWriter pen = new PrintWriter(System.out, true);
 
 		// Testing makeDAG for tree 1 level tree with 2 leafs
@@ -72,7 +74,7 @@ public class NewDAG {
 		test1Root.addChild("y");
 		pen.println(test1Root);
 		Table test1Table= makeDAG(test1Root);
-		 pen.println(test1Table.map);
+		pen.println(test1Table.map);
 		pen.println();
 		pen.println("Test makeDAG() 2 levels tree with 3 leafs");
 		pen.println("====================================");
@@ -82,6 +84,14 @@ public class NewDAG {
 		pen.println(test2Root);
 		Table test2Table = makeDAG(test2Root);
 		pen.println(test2Table.map);
+		pen.println();
+		String code = "sum(neg(x), neg(x), x, y)";
+		pen.println("Test makeDAG() of " + code);
+		pen.println("====================================");
+		TreeNode sumNegNeg = Parser.parse(code);
+		pen.println(sumNegNeg);
+		Table sNNmap = makeDAG(sumNegNeg);
+		pen.println(sNNmap.map);
 	}// main
 
 }
