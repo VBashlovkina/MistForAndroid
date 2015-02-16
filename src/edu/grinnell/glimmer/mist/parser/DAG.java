@@ -6,7 +6,7 @@ public class DAG {
 
 
 
-    static HashNode makeDAG(TreeNode root, HashMap<HashNode, Integer> hash, int i)
+  /*  static HashNode makeDAG(TreeNode root, HashMap<HashNode, Integer> hash, int i)
 	    throws Exception {
 
 	// what if it is already in the table?
@@ -33,6 +33,7 @@ public class DAG {
 	return temp;
 
     }
+    */
 
     public static void main(String[] args) throws Exception {
 	TreeNode t = new TreeNode("sum");

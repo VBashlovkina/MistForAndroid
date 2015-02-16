@@ -47,6 +47,9 @@ public class TreeNode {
     }
     /* Utility */
     
+    public boolean isLeaf(){
+    	return this.children.isEmpty();
+    }
     // TODO 
     public boolean equals(TreeNode other)
     {
@@ -70,7 +73,22 @@ public class TreeNode {
 	return result;
     }// toString Helper
 
-    
+    @Override 
+	public int hashCode(){
+	  int hash = 17;
+// Suitable nullity checks etc, of course :)
+   hash = hash * 23 + val.hashCode();
+   for(TreeNode node :children){
+	   if(! (node == null)){
+		   hash = hash * 23 + node.hashCode();
+	   }
+	   
+   }
+  
+  
+   return hash;
+
+	}
     
     public static void main(String[] args) throws Exception {
 	TreeNode result = new TreeNode("sum");
@@ -91,6 +109,13 @@ public class TreeNode {
 	TreeNode res = Parser.parse("x");
 	TreeNode correct = new TreeNode("x");
 	System.out.println(res);
+	
+	//Testing isLeaf()
+    System.out.println("TESTING isLeaf()");
+    TreeNode testNode = new TreeNode("x");
+    System.out.println("Expected:true  Actual:" + testNode.isLeaf());
+    testNode = result;
+    System.out.println("Expected:false  Actual:" + testNode.isLeaf());
 	
     }
 
