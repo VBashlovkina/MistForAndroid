@@ -17,6 +17,7 @@ import java.util.HashMap;
 public class HashNode {
 	
 	TreeNode node;
+	
 	ArrayList<Integer> childrenValues;
 	Integer nodeVal;
 	
@@ -34,7 +35,7 @@ public class HashNode {
 	public String toString(){
 		String result ="[ ("+this.nodeVal+") "+this.node.getRootVal()+" (";
 		for(Integer num : this.childrenValues){
-			result += num +",";
+			result += num +" ";
 		}//for
 		result += ") ]";
 		return result;
