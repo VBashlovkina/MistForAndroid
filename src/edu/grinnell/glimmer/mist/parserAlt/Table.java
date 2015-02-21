@@ -66,4 +66,13 @@ public class Table
   public HashMap<HashNode,Integer> getMap(){
     return this.map;
   }//getMap()  
+  
+  /**
+   * Convert to string
+   */
+  public String toString()
+  {
+    return map.toString() + " #" + this.availableNumber;
+  }
 }// Table
+
