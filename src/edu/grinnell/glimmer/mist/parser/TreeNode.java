@@ -8,12 +8,15 @@ public class TreeNode
 
   String val;
   ArrayList<TreeNode> children;
+  boolean set;
+  double evaluation;
 
   /* Constructor */
   public TreeNode(String str)
   {
     val = str;
     children = new ArrayList<>();
+    set = false;
   }// TreeNode
 
   /* Adding children */
@@ -30,11 +33,19 @@ public class TreeNode
 
   /* Getters */
 
+  /**
+   * TODO We don't use it?
+   * @return
+   */
   public int numChildren()
   {
     return children.size();
   }// numChildren
 
+  /**
+   * TODO We don't use it?
+   * @return
+   */
   public boolean hasChildren()
   {
     if (children.size() > 0)
@@ -45,15 +56,32 @@ public class TreeNode
   public ArrayList<TreeNode> getChildren()
   {
     return this.children;
-  }
+  }//getChildren
 
   public String getRootVal()
   {
     return this.val;
   }
 
+  public boolean isSet()
+  {
+    return set;
+  }
+  
+  public double getEvaluation()
+  {
+    return this.evaluation;
+  }
   /* Utility */
 
+  public void set()
+  {
+    set = true;
+  }
+  public void evaluate(double v)
+  {
+    evaluation = v;
+  }
   public boolean isLeaf()
   {
     return this.children.isEmpty();
