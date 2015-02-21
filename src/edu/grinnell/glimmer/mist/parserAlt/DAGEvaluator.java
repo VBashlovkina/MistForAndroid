@@ -24,21 +24,22 @@ public class DAGEvaluator
         return 1.0; //all leaves have value 1 for now
       }// if leaf
     
-    ArrayList<Double> temp = new ArrayList<>();
+    double[] temp = new double[root.numChildren()];
+    int i = 0;
     for (TreeNode kid : root.getChildren())
       {
-        temp.add(evaluate(kid));
+        temp[i++] = evaluate(kid);
       }
     root.set();
     root.evaluate(applyFunction(root.getNodeVal(), temp));
     return root.getEvaluation();
   }//
   
-  static double applyFunction(String functionName, ArrayList<Double> args)
+  static double applyFunction(String functionName, double[] args)
   {
     //STUB - always assume the function is sum 
     double sum = 0;
-    for (Double val : args)
+    for (double val : args)
       {
         sum += val;
       }
