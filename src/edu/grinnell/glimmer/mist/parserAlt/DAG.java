@@ -7,7 +7,8 @@ import edu.grinnell.glimmer.mist.parser.Parser;
 import edu.grinnell.glimmer.mist.parser.TreeNode;
 
 /**
- * Creates a directed acyclic graph from a non directed version
+ * Creates a directed acyclic graph with all unique nodes from 
+ * an n-ary tree with potentially repeated nodes.
  * @author Albert Owusu-Asare<br>
  *         Vasilisa Bashlovkina<br>
  *         Jason Liu<br>
@@ -16,11 +17,12 @@ import edu.grinnell.glimmer.mist.parser.TreeNode;
  */
 public class DAG
 {
-
   /**
    * Creates a new DAG.
-   * @param root the root of the tree
-   * @return the root of a DAG
+   * @param root 
+   * the root of the tree
+   * @return 
+   * the root of a corresponding DAG
    */
   public static TreeNode makeDAG(TreeNode root)
   {
@@ -31,8 +33,20 @@ public class DAG
     return makeDAGHelper(rootNode, reverseMap);
   }// makeDAG(TreeNode)
 
-  public static HashNode makeTable(TreeNode root, Table table,
-                                   HashMap<Integer,HashNode> reverseMap)
+  /**
+   * Populate two maps that are inverses of each other
+   * with (hash)nodes from the tree starting at root
+   * @param root
+   *  the original tree
+   * @param table
+   *  forward map encapsulated with a counter 
+   * @param reverseMap
+   *  reverse of the table map
+   * @post the two maps are populated
+   * @return the hashnode representing the root 
+   */
+  private static HashNode makeTable(TreeNode root, Table table,
+                                    HashMap<Integer, HashNode> reverseMap)
   {
     HashNode key = new HashNode(root);
     //if root is not a leaf : process all its children
@@ -46,88 +60,62 @@ public class DAG
           }//for
       }//if
     
-    
     //for a leaf, check if it exists in the table
     if (!table.map.containsKey(key))
       {
-        // set they key's number 
-        key.setNodeNumber(table.availableNumber);
+        // if not, set the key's number 
+        key.setNodeNumber(table.getAvailableNumber());
         // put it in the map and the reverse map
         table.map.put(key, key.getNodeNumber());
         reverseMap.put(key.getNodeNumber(), key);
+        // increment the counter in the table
         table.incrementAvailableNum();
       }//if
-    else 
-        key.setNodeNumber(table.map.get(key));
+    else
+      // if it's already in the table, retrieve its number 
+      key.setNodeNumber(table.map.get(key));
+
     return key;
-  }//makeDAG(Treenode, Table)
+  }//makeDAG(Treenode, Table, HashMap<Integer, HashNode>)
 
-
+  /**
+   * A helper method that builds a DAG given the
+   * populated map of hashnodes
+   * @param hashRoot
+   *    the root of the tree represented in the map
+   * @param reverseMap
+   * @return
+   */
   private static TreeNode makeDAGHelper(HashNode hashRoot,
                                         HashMap<Integer, HashNode> reverseMap)
   {
-
     TreeNode dagRoot = new TreeNode(hashRoot.getNodeVal());
     // if it's a leaf
     if (hashRoot.getChildrenNumbers().isEmpty())
-      {
-        return dagRoot;
-      }
+      return dagRoot;
 
     // otherwise, we need to recurse on its children
     for (Integer kid : hashRoot.getChildrenNumbers())
       {
         HashNode temp = reverseMap.get(kid);
-
-        //TreeNode newChild = new TreeNode(temp.node.val);
         dagRoot.addChild(makeDAGHelper(temp, reverseMap));
       }
     return dagRoot;
-  }
+  }// makeDAGHelper(HashNode, HashMap<Integer, HashNode>)
 
+  /**
+   * A simple experiment
+   * 
+   */
   public static void main(String[] args)
     throws Exception
   {
     PrintWriter pen = new PrintWriter(System.out, true);
-
     String code = "sum(neg(x), neg(x), x, y)";
-    
     TreeNode root = Parser.parse(code);
-    
     pen.println("After parsing, the tree is:\n " + root);
-    
-    TreeNode dagRoot  = makeDAG(root);
-    
+    TreeNode dagRoot = makeDAG(root);
     pen.println("After making a DAG, the tree is:\n " + dagRoot);
-    
-    // Testing makeDAG for tree 1 level tree with 2 leafs
-//    pen.println("Test makeDAG() 1 level tree with 2 leafs");
-//    pen.println("====================================");
-//    TreeNode test1Root = new TreeNode("square");
-//    test1Root.addChild("x");
-//    test1Root.addChild("y");
-//    pen.println(test1Root);
-//    Table test1Table = makeTable(test1Root);
-//    pen.println(test1Table.map);
-//    pen.println();
-//    pen.println("Test makeDAG() 2 levels tree with 3 leafs");
-//    pen.println("====================================");
-//    TreeNode test2Root = new TreeNode("square");
-//    test2Root.addChild("x");
-//    test2Root.addChild(test1Root);
-//    pen.println(test2Root);
-//    Table test2Table = makeTable(test2Root);
-//    pen.println(test2Table.map);
-//    pen.println();
-//    String code = "sum(neg(x), neg(x), x, y)";
-//    pen.println("Test makeDAG() of " + code);
-//    pen.println("====================================");
-//    TreeNode sumNegNeg = Parser.parse(code);
-//    pen.println(sumNegNeg);
-//    Table sNNmap = makeTable(sumNegNeg);
-//    pen.println(sNNmap.map);
-//    System.out.println("Resulting DAG/tree thing: \n" + makeDAG(sNNmap));
-
   }// main
 
-}//DAG
+}//DAG class
