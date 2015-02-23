@@ -9,19 +9,17 @@ import edu.grinnell.glimmer.mist.parser.TreeNode;
 public class DAGEvaluator
 {
 
-  
   public static double evaluate(TreeNode root)
   {
     if (root.isSet())
-        return root.getEvaluation();
-
-    
+        return root.getEvaluation(); 
     if (root.isLeaf())
       {
         //STUB
         root.set();
-        root.evaluate(1.0);
-        return 1.0; //all leaves have value 1 for now
+        double val = getContext(root.getNodeVal());
+        root.evaluate(val);
+        return val; //all leaves have value 1 for now
       }// if leaf
     
     double[] temp = new double[root.numChildren()];
@@ -35,14 +33,18 @@ public class DAGEvaluator
     return root.getEvaluation();
   }//
   
+  private static double getContext(String nodeVal)
+  {
+    //STUB - assume all context values are 1.0
+    return 1.0;
+  }
+
   static double applyFunction(String functionName, double[] args)
   {
     //STUB - always assume the function is sum 
     double sum = 0;
     for (double val : args)
-      {
         sum += val;
-      }
     return sum;
   }
   
