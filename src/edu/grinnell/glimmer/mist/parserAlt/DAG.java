@@ -30,7 +30,8 @@ public class DAG
     HashMap<Integer, HashNode> reverseMap = new HashMap<>();
     Table table = new Table(map);
     HashNode rootNode = makeTable(root, table, reverseMap);
-    return makeDAGHelper(rootNode, reverseMap);
+    HashMap<HashNode, TreeNode> auxMap = new HashMap<>();
+    return makeDAGHelper(rootNode, reverseMap, auxMap);
   }// makeDAG(TreeNode)
 
   /**
@@ -87,18 +88,26 @@ public class DAG
    * @return
    */
   private static TreeNode makeDAGHelper(HashNode hashRoot,
-                                        HashMap<Integer, HashNode> reverseMap)
+                                        HashMap<Integer, HashNode> reverseMap,
+                                        HashMap<HashNode, TreeNode> auxMap)
   {
+    // if the corresponding TreeNode was already made, pass a reference to it
+    if (auxMap.containsKey(hashRoot))
+        return auxMap.get(hashRoot);
+    
+    //otherwise, make a new TreeNode
     TreeNode dagRoot = new TreeNode(hashRoot.getNodeVal());
     // if it's a leaf
     if (hashRoot.getChildrenNumbers().isEmpty())
-      return dagRoot;
-
+      {
+        auxMap.put(hashRoot, dagRoot);
+        return dagRoot;
+      }
     // otherwise, we need to recurse on its children
     for (Integer kid : hashRoot.getChildrenNumbers())
       {
         HashNode temp = reverseMap.get(kid);
-        dagRoot.addChild(makeDAGHelper(temp, reverseMap));
+        dagRoot.addChild(makeDAGHelper(temp, reverseMap, auxMap));
       }
     return dagRoot;
   }// makeDAGHelper(HashNode, HashMap<Integer, HashNode>)
