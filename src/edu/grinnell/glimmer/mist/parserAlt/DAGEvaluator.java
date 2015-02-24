@@ -26,6 +26,7 @@ public class DAGEvaluator
     int i = 0;
     for (TreeNode kid : root.getChildren())
       {
+        //STUB
         temp[i++] = evaluate(kid);
       }
     root.set();

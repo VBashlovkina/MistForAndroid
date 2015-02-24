@@ -114,6 +114,7 @@ public class TreeNode
     return result;
   }// toString Helper
 
+  /*
   @Override
   public int hashCode()
   {
@@ -132,7 +133,7 @@ public class TreeNode
     return hash;
 
   }//hashCode()
-  
+  */
   public String getNodeVal(){
     return this.val;
   }
