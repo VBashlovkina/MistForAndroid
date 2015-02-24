@@ -33,14 +33,14 @@ public class DAGTest
     assertTrue("two children are the same", dagKid1.equals(dagKid2));
     // hashCode() is not overridden for TreeNode class, so it depends on the reference
     assertFalse("two identical tree children must not have the same hash", 
-                treeKid1.hashCode() == treeKid2.hashCode()); // PASSES
+                treeKid1.hashCode() == treeKid2.hashCode()); // PASS
     assertTrue("two identical dag children must have the same hash", 
-                dagKid1.hashCode() == dagKid2.hashCode()); // FAILS
+                dagKid1.hashCode() == dagKid2.hashCode()); // PASS
     // checking references directly
     assertFalse("two identical tree children must not have the same reference", 
-               treeKid1 == treeKid2); // PASSES
+               treeKid1 == treeKid2); // PASS
     assertTrue("two identical children must have the same reference", 
-               dagKid1 == dagKid2); // FAILS
+               dagKid1 == dagKid2); // PASS
     
   }
 }
