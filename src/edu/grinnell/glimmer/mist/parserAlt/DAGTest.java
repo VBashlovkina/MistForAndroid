@@ -43,4 +43,22 @@ public class DAGTest
                dagKid1 == dagKid2); // PASS
     
   }
+  
+  @Test
+  public void twoLevelTreeTest() throws Exception
+  {
+    TreeNode tree = Parser.parse("wsum(mult(x, x),mult(x, x), x)");
+    TreeNode dag = DAG.makeDAG(tree);
+    assertTrue("tree and dag must have the same string representation",
+               dag.equals(tree));
+    TreeNode multKid1 = dag.getChildren().get(0);
+    TreeNode multKid2 = dag.getChildren().get(1);
+    TreeNode xKidLevel2 = dag.getChildren().get(2);
+    TreeNode xKidLevel3 = multKid1.getChildren().get(0);
+    
+    assertTrue("two mult subtrees must have the same hash", 
+               multKid1.hashCode() == multKid2.hashCode());
+    assertTrue("two x subtrees on different levels must have the same hash", 
+               xKidLevel2.hashCode() == xKidLevel3.hashCode());
+  }
 }

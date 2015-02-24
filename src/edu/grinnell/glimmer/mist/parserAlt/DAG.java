@@ -95,20 +95,15 @@ public class DAG
     if (auxMap.containsKey(hashRoot))
         return auxMap.get(hashRoot);
     
-    //otherwise, make a new TreeNode
+    // otherwise, make a new TreeNode
     TreeNode dagRoot = new TreeNode(hashRoot.getNodeVal());
-    // if it's a leaf
-    if (hashRoot.getChildrenNumbers().isEmpty())
-      {
-        auxMap.put(hashRoot, dagRoot);
-        return dagRoot;
-      }
-    // otherwise, we need to recurse on its children
+    // recurse on its children, if there are any
     for (Integer kid : hashRoot.getChildrenNumbers())
       {
         HashNode temp = reverseMap.get(kid);
         dagRoot.addChild(makeDAGHelper(temp, reverseMap, auxMap));
       }
+    auxMap.put(hashRoot, dagRoot);
     return dagRoot;
   }// makeDAGHelper(HashNode, HashMap<Integer, HashNode>)
 
