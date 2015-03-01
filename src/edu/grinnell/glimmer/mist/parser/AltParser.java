@@ -1,4 +1,5 @@
-package alternative;
+package edu.grinnell.glimmer.mist.parser;
+
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class AltParser {
      *         appear in the code
      */
     static String[] magicSplit(String code) {
-	// Throw away the parens
+	// Throw away the commas
 	String[] commaSplit = code.split(",");
 	char[] withParens;
 	String withoutParens;
@@ -40,15 +41,17 @@ public class AltParser {
 	    withParens = str.toCharArray();
 	    withoutParens = "";
 	    for (int i = 0; i < withParens.length; i++) {
-		if ((c = withParens[i]) == '(' || c == ')') {
+		if ((c = withParens[i]) == '(' || c == ')' || c == ',') {
 		    // put the withoutParens so far into the ArrayList
 		    if (!withoutParens.equals(""))
 			result.add(new String(withoutParens));
 		    // clear without parens
 		    withoutParens = "";
-		    // put the paren into the arraylist, too
-		    result.add(c + "");
-		} else
+		    // put the paren into the arraylist, but skip commas
+		    if (c != ',')
+			result.add(c + "");
+		} 
+		else
 		    withoutParens += c;
 	    }// for each char
 
@@ -79,7 +82,7 @@ public class AltParser {
 	for (int i = 2; i < splits.length; i++) {
 	    if (splits[i].equals("(")) // open paren means previously added node
 				       // has children
-		currentRoot = currentRoot.children.get(currentRoot
+		currentRoot = (AltTreeNode) currentRoot.getChildren().get(currentRoot
 			.numChildren() - 1); // will be adding to the last child
 	    else if (splits[i].equals(")"))
 		currentRoot = currentRoot.parent; // closed paren means we need
