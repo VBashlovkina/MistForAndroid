@@ -2,17 +2,9 @@ package evaluating;
 
 public abstract class Function
 {
-  public abstract double apply(double[] args);
+  public abstract RGBValue apply(RGBValue[] args) throws Exception;
  
-  public double range(double result)
-  {
-    if (result > 1.0)
-      return 1.0;
-    else if (result < -1.0)
-      return -1.0;
-    else
-      return result;
-  }
+  
 
   
 }// abstract class Function
