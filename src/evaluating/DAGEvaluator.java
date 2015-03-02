@@ -70,17 +70,19 @@ public class DAGEvaluator
                         return range(prod);
                       }
                     });
+    // Average
     functions.put("avg", new Function()
                     {
                       @Override
                       public double apply(double[] args)
                       {
-                        double prod = 0;
+                        double sum = 0;
                         for (double arg : args)
-                          prod *= arg;
-                        return range(prod);
+                          sum += arg;
+                        return range(sum/(args.length * 1.0));
                       }
                     });
+    
     
 
   }
