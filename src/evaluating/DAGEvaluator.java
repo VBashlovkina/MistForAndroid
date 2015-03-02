@@ -2,20 +2,21 @@ package evaluating;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import dagmaking.DAG;
 
 import parsing.Parser;
 import parsing.TreeNode;
 
-
 public class DAGEvaluator
 {
+  static HashMap<String, Function> functions = new HashMap<>();
 
   public static double evaluate(TreeNode root)
   {
     if (root.isSet())
-        return root.getEvaluation(); 
+      return root.getEvaluation();
     if (root.isLeaf())
       {
         //STUB
@@ -24,35 +25,68 @@ public class DAGEvaluator
         root.evaluate(val);
         return val; //all leaves have value 1 for now
       }// if leaf
-    
-    double[] temp = new double[root.numChildren()];
+
+    double[] args = new double[root.numChildren()];
     int i = 0;
     for (TreeNode kid : root.getChildren())
       {
         //STUB
-        temp[i++] = evaluate(kid);
+        args[i++] = evaluate(kid);
       }
     root.set();
-    root.evaluate(applyFunction(root.getNodeVal(), temp));
+    root.evaluate(functions.get(root.getNodeVal()).apply(args));
     return root.getEvaluation();
   }//
-  
+
   private static double getContext(String nodeVal)
   {
     //STUB - assume all context values are 1.0
     return 1.0;
   }
 
-  static double applyFunction(String functionName, double[] args)
+  static void populateFunctionMap()
   {
-    //STUB - always assume the function is sum 
-    double sum = 0;
-    for (double val : args)
-        sum += val;
-    return sum;
+    // Sum
+    functions.put("sum", new Function()
+                    {
+                      @Override
+                      public double apply(double[] args)
+                      {
+                        double sum = 0;
+                        for (double arg : args)
+                          sum += arg;
+                        return range(sum);
+                      }
+                    });
+    // Mult
+    functions.put("mult", new Function()
+                    {
+                      @Override
+                      public double apply(double[] args)
+                      {
+                        double prod = 0;
+                        for (double arg : args)
+                          prod *= arg;
+                        return range(prod);
+                      }
+                    });
+    functions.put("avg", new Function()
+                    {
+                      @Override
+                      public double apply(double[] args)
+                      {
+                        double prod = 0;
+                        for (double arg : args)
+                          prod *= arg;
+                        return range(prod);
+                      }
+                    });
+    
+
   }
-  
-  public static void main(String[] args) throws Exception
+
+  public static void main(String[] args)
+    throws Exception
   {
     PrintWriter pen = new PrintWriter(System.out, true);
     String code = "sum(neg(x), neg(x), x, y)";
