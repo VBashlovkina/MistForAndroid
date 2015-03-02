@@ -3,6 +3,8 @@ package parsing;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import evaluating.RGBValue;
+
 
 public class TreeNode
 {
@@ -10,7 +12,7 @@ public class TreeNode
   String val;
   ArrayList<TreeNode> children;
   boolean set;
-  double evaluation;
+  RGBValue evaluation;
 
   /* Constructor */
   public TreeNode(String str)
@@ -69,7 +71,7 @@ public class TreeNode
     return set;
   }
   
-  public double getEvaluation()
+  public RGBValue getEvaluation()
   {
     return this.evaluation;
   }
@@ -79,7 +81,7 @@ public class TreeNode
   {
     set = true;
   }
-  public void evaluate(double v)
+  public void evaluate(RGBValue v)
   {
     evaluation = v;
   }
