@@ -2,27 +2,44 @@ package evaluating;
 
 import java.io.PrintWriter;
 import java.util.HashMap;
-
 import dagmaking.DAG;
+import parsing.*;
 
-import parsing.Parser;
-import parsing.TreeNode;
-
+/**
+ * A class for evaluating DAGs.
+ * 
+ * @author Mist Parser team
+ */
 public class DAGEvaluator
 {
+  // Hashtable of MIST function strings and their implementations
   HashMap<String, Function> functions;
 
+  /**
+   *  Build an DAGEvaluator with a complete functions hashtable
+   */
   public DAGEvaluator()
   {
     functions = new HashMap<>();
     populateFunctionMap();
-  }
+  }// DAGEvaluator()
 
+  /**
+   * Evaluate a DAG.
+   * @param root of the DAG
+   * @return the RGB value of the DAG
+   * @throws Exception 
+   *    if something has wrong arguments or
+   *    if a function is not in the hash
+   */
   public RGBValue evaluate(TreeNode root)
     throws Exception
   {
+    // If set, this has already been evaluated 
     if (root.isSet())
       return root.getEvaluation();
+
+    // If leaf, get context parameters
     if (root.isLeaf())
       {
         //STUB
@@ -32,24 +49,36 @@ public class DAGEvaluator
         return val; //all leaves have value 1 for now
       }// if leaf
 
+    // Otherwise, recurse on each child
     RGBValue[] args = new RGBValue[root.numChildren()];
     int i = 0;
     for (TreeNode kid : root.getChildren())
-      {
-        //STUB
-        args[i++] = evaluate(kid);
-      }
-    root.set();
-    root.evaluate(functions.get(root.getNodeVal()).apply(args));
-    return root.getEvaluation();
-  }//
+      args[i++] = evaluate(kid);
 
+    // Apply root's function to the children arguments 
+    root.set();
+    Function f = functions.get(root.getNodeVal());
+    if (f == null)
+      throw new Exception(root.getNodeVal() + " is not a valid MIST function");
+    root.evaluate(f.apply(args));
+    return root.getEvaluation();
+  }// evaluate(TreeNode)
+
+  /**
+   * Get environmental variables like x, y, t.s, etc.
+   * @param nodeVal, string representation of the
+   *    desired environmental variable
+   * @return (1,1,1) <- STUB
+   */
   private static RGBValue getContext(String nodeVal)
   {
     //STUB - assume all context values are 1.0
     return new RGBValue(1.0, 1.0, 1.0);
   }
 
+  /**
+   * Populate the map with function strings and corresponding implementations
+   */
   void populateFunctionMap()
   {
     // Sum
@@ -66,7 +95,7 @@ public class DAGEvaluator
                         return sum;
                       }
                     });
-    // Mult
+    // Multiplication
     functions.put("mult", new Function()
                     {
                       public RGBValue apply(RGBValue[] args)
@@ -95,6 +124,7 @@ public class DAGEvaluator
                         return sum;
                       }
                     });
+    // Wrap sum
     functions.put("wsum", new Function()
                     {
                       public RGBValue apply(RGBValue[] args)
@@ -108,7 +138,7 @@ public class DAGEvaluator
                         return sum;
                       }
                     });
-
+    // Negate
     functions.put("neg", new Function()
                     {
                       public RGBValue apply(RGBValue[] args)
@@ -125,6 +155,7 @@ public class DAGEvaluator
                         return result;
                       }
                     });
+    // Sine
     functions.put("sin", new Function()
                     {
                       public RGBValue apply(RGBValue[] args)
@@ -142,6 +173,7 @@ public class DAGEvaluator
                         return result;
                       }
                     });
+    // Cosine
     functions.put("cos", new Function()
                     {
                       public RGBValue apply(RGBValue[] args)
@@ -159,7 +191,7 @@ public class DAGEvaluator
                         return result;
                       }
                     });
-
+    // Square root
     functions.put("sqr", new Function()
                     {
                       public RGBValue apply(RGBValue[] args)
@@ -177,7 +209,8 @@ public class DAGEvaluator
                         return result;
                       }
                     });
-    functions.put("sqr", new Function()
+    // Absolute value
+    functions.put("abs", new Function()
                     {
                       public RGBValue apply(RGBValue[] args)
                         throws Exception
@@ -231,6 +264,7 @@ public class DAGEvaluator
                           return args[2];
                       }
                     });
+    // RGB
     functions.put("rgb", new Function()
                     {
                       public RGBValue apply(RGBValue[] args)
@@ -251,6 +285,15 @@ public class DAGEvaluator
 
   }// populateFunctionMap
 
+  /** 
+   * Helper interface for Function objects
+   */
+  public interface Function
+  {
+    public RGBValue apply(RGBValue[] args)
+      throws Exception;
+  }// interface Function
+
   public static void main(String[] args)
     throws Exception
   {
@@ -261,8 +304,6 @@ public class DAGEvaluator
     TreeNode dagRoot = DAG.makeDAG(root);
     pen.println("After making a DAG, the tree is:\n " + dagRoot);
     DAGEvaluator e = new DAGEvaluator();
-    System.out.println("Result is " + e.evaluate(dagRoot));//should be 4
-
-  }
-
-}
+    pen.println("Result is " + e.evaluate(dagRoot));
+  }// main
+}// DAGEvaluator class
