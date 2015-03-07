@@ -14,6 +14,201 @@ public class DAGEvaluator
 {
   // Hashtable of MIST function strings and their implementations
   HashMap<String, Function> functions;
+  
+ Function function1[] = { 
+                          new Function()
+    {
+      public RGBValue apply(RGBValue[] args)
+      {
+        RGBValue sum = new RGBValue(0, 0, 0);
+        for (RGBValue arg : args)
+          {
+            sum.add(arg);
+          }                                       // for each argument
+        sum.range();
+        return sum;
+      }
+    },
+
+  new Function()
+    {
+      public RGBValue apply(RGBValue[] args)
+      {
+        RGBValue sum = new RGBValue(0, 0, 0);
+        for (RGBValue arg : args)
+          {
+            sum.add(arg);
+          }                                       // for each argument
+        sum.wrap();
+        return sum;
+      }
+    }, new Function()
+    {
+      public RGBValue apply(RGBValue[] args)
+      {
+        RGBValue prod = new RGBValue(1, 1, 1);
+        for (RGBValue arg : args)
+          {
+            prod.multiplyBy(arg);
+          }                                       // for each argument
+        prod.range();
+        return prod;
+      }
+    }, new Function()
+    {
+      public RGBValue apply(RGBValue[] args)
+      {
+        RGBValue sum = new RGBValue(0, 0, 0);
+        for (RGBValue arg : args)
+          {
+            sum.add(arg);
+          }                                       // for each argument
+        sum.range();
+        sum.multiplyBy(new RGBValue(1 / ((double) args.length)));
+        return sum;
+      }
+    },
+
+  new Function()
+    {
+      public RGBValue apply(RGBValue[] args)
+        throws Exception
+      {
+        if (args.length != 1)
+          throw new Exception();
+        RGBValue result = new RGBValue();
+        for (int i = 0; i < 3; i++)
+          { // Notice that we allow negative inputs 
+            result.components[i] = Math.sqrt(Math.abs(args[0].components[i]));
+          }                                       // for each component
+        result.range();
+        return result;
+      }
+    }, new Function()
+    {
+      public RGBValue apply(RGBValue[] args)
+        throws Exception
+      {
+        if (args.length != 1)
+          throw new Exception();
+        RGBValue result = new RGBValue();
+        for (int i = 0; i < 3; i++)
+          {
+            result.components[i] = -1.0 * args[0].components[i];
+          }                                       // for each component
+        result.range();
+        return result;
+      }
+    }, new Function()
+    {
+      public RGBValue apply(RGBValue[] args)
+        throws Exception
+      {
+        if (args.length != 1)
+          throw new Exception();
+        RGBValue result = new RGBValue();
+        for (int i = 0; i < 3; i++)
+          {
+            result.components[i] = Math.sin(args[0].components[i]);
+          }                                       // for each component
+        result.range();
+        return result;
+      }
+    },
+
+  new Function()
+    {
+      public RGBValue apply(RGBValue[] args)
+        throws Exception
+      {
+        if (args.length != 1)
+          throw new Exception();
+        RGBValue result = new RGBValue();
+        for (int i = 0; i < 3; i++)
+          {
+            result.components[i] = Math.cos(args[0].components[i]);
+          }                                       // for each component
+        result.range();
+        return result;
+      }
+    }, new Function()
+    {
+      public RGBValue apply(RGBValue[] args)
+        throws Exception
+      {
+        if (args.length != 1)
+          throw new Exception();
+        RGBValue result = new RGBValue();
+        for (int i = 0; i < 3; i++)
+          { // Notice that we allow negative inputs 
+            result.components[i] = Math.abs(args[0].components[i]);
+          }                                       // for each component
+        result.range();
+        return result;
+      }
+    }, new Function()
+    {
+      public RGBValue apply(RGBValue[] args)
+        throws Exception
+      {
+        if (args.length != 1)
+          throw new Exception();
+
+        if (args[0].components[0] > 0 && args[0].components[1] > 0
+            && args[0].components[2] > 0)
+          return new RGBValue(1.0);
+        else
+          return new RGBValue(-1.0);
+      }
+    }, new Function()
+    {
+      public RGBValue apply(RGBValue[] args)
+        throws Exception
+      {
+        if (args.length != 3)
+          throw new Exception();
+                                                  // If each component of the test is positive
+        if (args[0].components[0] > 0 && args[0].components[1] > 0
+            && args[0].components[2] > 0)
+                                                  // return the first option
+          return args[1];
+        else
+                                                  // otherwise, the second option
+          return args[2];
+      }
+    }, new Function()
+    {
+      public RGBValue apply(RGBValue[] args)
+        throws Exception
+      {
+        if (args.length != 3)
+          throw new Exception();
+                                                  // Take the first component of the first child, 
+                                                  // second of the second child, etc
+        RGBValue result =
+            new RGBValue(args[0].components[0], args[1].components[1],
+                         args[2].components[2]);
+        result.range();
+        return result;
+      }
+    } };
+
+  public enum FUN_NAMES
+    {
+      FUN_SUM, //0
+      FUN_WSUM, //1
+      FUN_MULT, //2
+      FUN_AVG, //3
+      FUN_SQR, //4
+      FUN_NEG, //5
+      FUN_SIN, //6
+      FUN_COS, //7
+      FUN_ABS, //8
+      FUN_SIGN, //9
+      FUN_IF, //10
+      FUN_RGB; //11
+    };
+
 
   /**
    *  Build an DAGEvaluator with a complete functions hashtable
@@ -57,7 +252,8 @@ public class DAGEvaluator
 
     // Apply root's function to the children arguments 
     root.set();
-    Function f = functions.get(root.getNodeVal());
+    Function f = getFunction(root.getNodeVal()); // using enum + array
+    //Function f = functions.get(root.getNodeVal()); // using HashMap
     if (f == null)
       throw new Exception(root.getNodeVal() + " is not a valid MIST function");
     root.evaluate(f.apply(args));
@@ -75,6 +271,23 @@ public class DAGEvaluator
     //STUB - assume all context values are 1.0
     return new RGBValue(1.0, 1.0, 1.0);
   }
+
+  /**
+   * Get the function object based in its string representation
+   * @param funName, string representation of the function
+   * @return the corresponding function object
+   * @throws Exception 
+   */
+  Function getFunction(String funName) throws Exception
+  {
+    try{
+    FUN_NAMES name = FUN_NAMES.valueOf("FUN_" + funName.toUpperCase());
+    return function1[name.ordinal()];
+    } // try
+    catch (Exception e){
+      throw new Exception("Invalid function name:" + funName);
+    } // catch
+  } // getFunction
 
   /**
    * Populate the map with function strings and corresponding implementations
@@ -100,7 +313,7 @@ public class DAGEvaluator
                     {
                       public RGBValue apply(RGBValue[] args)
                       {
-                        RGBValue prod = new RGBValue(0, 0, 0);
+                        RGBValue prod = new RGBValue(1, 1, 1);
                         for (RGBValue arg : args)
                           {
                             prod.multiplyBy(arg);
@@ -298,12 +511,18 @@ public class DAGEvaluator
     throws Exception
   {
     PrintWriter pen = new PrintWriter(System.out, true);
-    String code = "sum(neg(x), avg(x,y), x, y)";
+    String code = "wsum(x,x)";
     TreeNode root = Parser.parse(code);
     pen.println("After parsing, the tree is:\n " + root);
     TreeNode dagRoot = DAG.makeDAG(root);
     pen.println("After making a DAG, the tree is:\n " + dagRoot);
     DAGEvaluator e = new DAGEvaluator();
     pen.println("Result is " + e.evaluate(dagRoot));
+    
+    // Experimenting with enum valueOf and ordinal
+    int arr[] = { 7, 2, 3 };
+    String funName = "sum";
+    FUN_NAMES name = FUN_NAMES.valueOf("FUN_" + funName.toUpperCase());
+    pen.println(arr[name.ordinal()]);
   }// main
 }// DAGEvaluator class

@@ -56,11 +56,12 @@ public class RGBValue
   }// range
   
   /**
+   * TODO broken
    * An equivalent to range used in "wsum" function:
    * Bound each component value to the closed interval [-1,1] 
    * by wrapping around the interval
    */
-  public void wrap()
+  public void wrap() 
   {
     for (int i = 0; i < 3; i++)
       {
@@ -110,7 +111,7 @@ public class RGBValue
    */
   public static void main(String[] args)
   {
-    RGBValue seventeen = new RGBValue(17.2, -17.2, -.5);
+    RGBValue seventeen = new RGBValue(17.2, -17.2, 7.7);
     seventeen.wrap();
     System.out.println(seventeen);
     System.out.println(((int)17.2 / 2 + 1));
