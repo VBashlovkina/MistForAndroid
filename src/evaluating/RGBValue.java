@@ -39,6 +39,24 @@ public class RGBValue
     components[0] = components[1] = components[2] = gray;
   }
   
+    public boolean equals(Object obj){
+  
+    if(obj == this)
+    return true;
+    if(!(obj instanceof RGBValue))
+    return false;
+    RGBValue rv = (RGBValue) obj;
+    double threshold = 0.00000000001;
+    
+    if ((Math.abs(rv.components[0]-this.components[0])<threshold) &&
+        (Math.abs(rv.components[1]-this.components[1])<threshold) &&
+        (Math.abs(rv.components[2]-this.components[2])<threshold))
+      return true;
+    else
+      return false;
+  
+  }
+  
   /**
    * Bound each component value to the closed interval [-1,1]
    * by clipping it at the endpoints of the interval
