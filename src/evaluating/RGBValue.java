@@ -108,11 +108,10 @@ public class RGBValue
    */
   public static void main(String[] args)
   {
-    RGBValue seventeen = new RGBValue(17.2, -17.2, -7.7);
+    RGBValue seventeen = new RGBValue(17.2, -17.2, 1);
     System.out.println("original" + seventeen);
     seventeen.wrap();
     System.out.println(seventeen);
-    System.out.println(((int)17.2 / 2 + 1));
   }// main
   
   
