@@ -75,7 +75,6 @@ public class DAGEvaluator
                               }
                             }, // Average
                           // Square
-                          // TODO it's currently square root
                           new Function()
                             {
                               public RGBValue apply(RGBValue[] args)
@@ -83,12 +82,9 @@ public class DAGEvaluator
                               {
                                 if (args.length != 1)
                                   throw new Exception();
-                                RGBValue result = new RGBValue();
-                                for (int i = 0; i < 3; i++)
-                                  { // Notice that we allow negative inputs 
-                                    result.components[i] =
-                                        Math.sqrt(Math.abs(args[0].components[i]));
-                                  }
+                                RGBValue result = new RGBValue(1,1,1);
+                                result.multiplyBy(args[0]);
+                                result.multiplyBy(args[0]);
                                 result.range();
                                 return result;
                               }
@@ -173,7 +169,6 @@ public class DAGEvaluator
                               {
                                 if (args.length != 1)
                                   throw new Exception();
-
                                 if (args[0].components[0] > 0
                                     && args[0].components[1] > 0
                                     && args[0].components[2] > 0)
