@@ -14,184 +14,212 @@ public class DAGEvaluator
 {
   // Hashtable of MIST function strings and their implementations
   HashMap<String, Function> functions;
-  
- Function function1[] = { 
+
+  Function function1[] = {
+                          // Sum
                           new Function()
-    {
-      public RGBValue apply(RGBValue[] args)
-      {
-        RGBValue sum = new RGBValue(0, 0, 0);
-        for (RGBValue arg : args)
-          {
-            sum.add(arg);
-          }                                       // for each argument
-        sum.range();
-        return sum;
-      }
-    },
+                            {
+                              public RGBValue apply(RGBValue[] args)
+                              {
+                                RGBValue sum = new RGBValue(0, 0, 0);
+                                for (RGBValue arg : args)
+                                  {
+                                    sum.add(arg);
+                                  }
+                                sum.range();
+                                return sum;
+                              }
+                            }, //Sum
+                          // Wrap sum
+                          new Function()
+                            {
+                              public RGBValue apply(RGBValue[] args)
+                              {
+                                RGBValue sum = new RGBValue(0, 0, 0);
+                                for (RGBValue arg : args)
+                                  {
+                                    sum.add(arg);
+                                  }
+                                sum.wrap();
+                                return sum;
+                              }
+                            }, // Wrap sum
+                          // Multiply
+                          new Function()
+                            {
+                              public RGBValue apply(RGBValue[] args)
+                              {
+                                RGBValue prod = new RGBValue(1, 1, 1);
+                                for (RGBValue arg : args)
+                                  {
+                                    prod.multiplyBy(arg);
+                                  }
+                                prod.range();
+                                return prod;
+                              }
+                            }, // Multiply
+                          // Average
+                          new Function()
+                            {
+                              public RGBValue apply(RGBValue[] args)
+                              {
+                                RGBValue sum = new RGBValue(0, 0, 0);
+                                for (RGBValue arg : args)
+                                  {
+                                    sum.add(arg);
+                                  }
+                                sum.range();
+                                sum.multiplyBy(new RGBValue(
+                                                            1 / ((double) args.length)));
+                                return sum;
+                              }
+                            }, // Average
+                          // Square
+                          // TODO it's currently square root
+                          new Function()
+                            {
+                              public RGBValue apply(RGBValue[] args)
+                                throws Exception
+                              {
+                                if (args.length != 1)
+                                  throw new Exception();
+                                RGBValue result = new RGBValue();
+                                for (int i = 0; i < 3; i++)
+                                  { // Notice that we allow negative inputs 
+                                    result.components[i] =
+                                        Math.sqrt(Math.abs(args[0].components[i]));
+                                  }
+                                result.range();
+                                return result;
+                              }
+                            }, // Square
+                          // Negate
+                          new Function()
+                            {
+                              public RGBValue apply(RGBValue[] args)
+                                throws Exception
+                              {
+                                if (args.length != 1)
+                                  throw new Exception();
+                                RGBValue result = new RGBValue();
+                                for (int i = 0; i < 3; i++)
+                                  {
+                                    result.components[i] =
+                                        -1.0 * args[0].components[i];
+                                  } // for each component
+                                result.range();
+                                return result;
+                              }
+                            }, // Negate
+                          // Sine
+                          new Function()
+                            {
+                              public RGBValue apply(RGBValue[] args)
+                                throws Exception
+                              {
+                                if (args.length != 1)
+                                  throw new Exception();
+                                RGBValue result = new RGBValue();
+                                for (int i = 0; i < 3; i++)
+                                  {
+                                    result.components[i] =
+                                        Math.sin(args[0].components[i]);
+                                  }
+                                result.range();
+                                return result;
+                              }
+                            }, //Sine
+                          // Cosine
+                          new Function()
+                            {
+                              public RGBValue apply(RGBValue[] args)
+                                throws Exception
+                              {
+                                if (args.length != 1)
+                                  throw new Exception();
+                                RGBValue result = new RGBValue();
+                                for (int i = 0; i < 3; i++)
+                                  {
+                                    result.components[i] =
+                                        Math.cos(args[0].components[i]);
+                                  } // for each component
+                                result.range();
+                                return result;
+                              }
+                            }, //Cosine
+                          // Absolute value
+                          new Function()
+                            {
+                              public RGBValue apply(RGBValue[] args)
+                                throws Exception
+                              {
+                                if (args.length != 1)
+                                  throw new Exception();
+                                RGBValue result = new RGBValue();
+                                for (int i = 0; i < 3; i++)
+                                  {
+                                    result.components[i] =
+                                        Math.abs(args[0].components[i]);
+                                  }
+                                result.range();
+                                return result;
+                              }
+                            },//Abs
+                          // Sign
+                          new Function()
+                            {
+                              public RGBValue apply(RGBValue[] args)
+                                throws Exception
+                              {
+                                if (args.length != 1)
+                                  throw new Exception();
 
-  new Function()
-    {
-      public RGBValue apply(RGBValue[] args)
-      {
-        RGBValue sum = new RGBValue(0, 0, 0);
-        for (RGBValue arg : args)
-          {
-            sum.add(arg);
-          }                                       // for each argument
-        sum.wrap();
-        return sum;
-      }
-    }, new Function()
-    {
-      public RGBValue apply(RGBValue[] args)
-      {
-        RGBValue prod = new RGBValue(1, 1, 1);
-        for (RGBValue arg : args)
-          {
-            prod.multiplyBy(arg);
-          }                                       // for each argument
-        prod.range();
-        return prod;
-      }
-    }, new Function()
-    {
-      public RGBValue apply(RGBValue[] args)
-      {
-        RGBValue sum = new RGBValue(0, 0, 0);
-        for (RGBValue arg : args)
-          {
-            sum.add(arg);
-          }                                       // for each argument
-        sum.range();
-        sum.multiplyBy(new RGBValue(1 / ((double) args.length)));
-        return sum;
-      }
-    },
-
-  new Function()
-    {
-      public RGBValue apply(RGBValue[] args)
-        throws Exception
-      {
-        if (args.length != 1)
-          throw new Exception();
-        RGBValue result = new RGBValue();
-        for (int i = 0; i < 3; i++)
-          { // Notice that we allow negative inputs 
-            result.components[i] = Math.sqrt(Math.abs(args[0].components[i]));
-          }                                       // for each component
-        result.range();
-        return result;
-      }
-    }, new Function()
-    {
-      public RGBValue apply(RGBValue[] args)
-        throws Exception
-      {
-        if (args.length != 1)
-          throw new Exception();
-        RGBValue result = new RGBValue();
-        for (int i = 0; i < 3; i++)
-          {
-            result.components[i] = -1.0 * args[0].components[i];
-          }                                       // for each component
-        result.range();
-        return result;
-      }
-    }, new Function()
-    {
-      public RGBValue apply(RGBValue[] args)
-        throws Exception
-      {
-        if (args.length != 1)
-          throw new Exception();
-        RGBValue result = new RGBValue();
-        for (int i = 0; i < 3; i++)
-          {
-            result.components[i] = Math.sin(args[0].components[i]);
-          }                                       // for each component
-        result.range();
-        return result;
-      }
-    },
-
-  new Function()
-    {
-      public RGBValue apply(RGBValue[] args)
-        throws Exception
-      {
-        if (args.length != 1)
-          throw new Exception();
-        RGBValue result = new RGBValue();
-        for (int i = 0; i < 3; i++)
-          {
-            result.components[i] = Math.cos(args[0].components[i]);
-          }                                       // for each component
-        result.range();
-        return result;
-      }
-    }, new Function()
-    {
-      public RGBValue apply(RGBValue[] args)
-        throws Exception
-      {
-        if (args.length != 1)
-          throw new Exception();
-        RGBValue result = new RGBValue();
-        for (int i = 0; i < 3; i++)
-          { // Notice that we allow negative inputs 
-            result.components[i] = Math.abs(args[0].components[i]);
-          }                                       // for each component
-        result.range();
-        return result;
-      }
-    }, new Function()
-    {
-      public RGBValue apply(RGBValue[] args)
-        throws Exception
-      {
-        if (args.length != 1)
-          throw new Exception();
-
-        if (args[0].components[0] > 0 && args[0].components[1] > 0
-            && args[0].components[2] > 0)
-          return new RGBValue(1.0);
-        else
-          return new RGBValue(-1.0);
-      }
-    }, new Function()
-    {
-      public RGBValue apply(RGBValue[] args)
-        throws Exception
-      {
-        if (args.length != 3)
-          throw new Exception();
-                                                  // If each component of the test is positive
-        if (args[0].components[0] > 0 && args[0].components[1] > 0
-            && args[0].components[2] > 0)
-                                                  // return the first option
-          return args[1];
-        else
-                                                  // otherwise, the second option
-          return args[2];
-      }
-    }, new Function()
-    {
-      public RGBValue apply(RGBValue[] args)
-        throws Exception
-      {
-        if (args.length != 3)
-          throw new Exception();
-                                                  // Take the first component of the first child, 
-                                                  // second of the second child, etc
-        RGBValue result =
-            new RGBValue(args[0].components[0], args[1].components[1],
-                         args[2].components[2]);
-        result.range();
-        return result;
-      }
-    } };
+                                if (args[0].components[0] > 0
+                                    && args[0].components[1] > 0
+                                    && args[0].components[2] > 0)
+                                  return new RGBValue(1.0);
+                                else
+                                  return new RGBValue(-1.0);
+                              }
+                            }, // Sign
+                          // If
+                          new Function()
+                            {
+                              public RGBValue apply(RGBValue[] args)
+                                throws Exception
+                              {
+                                if (args.length != 3)
+                                  throw new Exception();
+                                // If each component of the test is positive
+                                if (args[0].components[0] > 0
+                                    && args[0].components[1] > 0
+                                    && args[0].components[2] > 0)
+                                  // return the first option
+                                  return args[1];
+                                else
+                                  // otherwise, the second option
+                                  return args[2];
+                              }
+                            },// If
+                          // RGB
+                          new Function()
+                            {
+                              public RGBValue apply(RGBValue[] args)
+                                throws Exception
+                              {
+                                if (args.length != 3)
+                                  throw new Exception();
+                                // Take the first component of the first child, 
+                                // second of the second child, etc
+                                RGBValue result =
+                                    new RGBValue(args[0].components[0],
+                                                 args[1].components[1],
+                                                 args[2].components[2]);
+                                result.range();
+                                return result;
+                              }
+                            } // RGB
+  }; //functions array
 
   public enum FUN_NAMES
     {
@@ -208,7 +236,6 @@ public class DAGEvaluator
       FUN_IF, //10
       FUN_RGB; //11
     };
-
 
   /**
    *  Build an DAGEvaluator with a complete functions hashtable
@@ -278,15 +305,18 @@ public class DAGEvaluator
    * @return the corresponding function object
    * @throws Exception 
    */
-  Function getFunction(String funName) throws Exception
+  Function getFunction(String funName)
+    throws Exception
   {
-    try{
-    FUN_NAMES name = FUN_NAMES.valueOf("FUN_" + funName.toUpperCase());
-    return function1[name.ordinal()];
-    } // try
-    catch (Exception e){
-      throw new Exception("Invalid function name:" + funName);
-    } // catch
+    try
+      {
+        FUN_NAMES name = FUN_NAMES.valueOf("FUN_" + funName.toUpperCase());
+        return function1[name.ordinal()];
+      } // try
+    catch (Exception e)
+      {
+        throw new Exception("Invalid function name:" + funName);
+      } // catch
   } // getFunction
 
   /**
@@ -518,7 +548,7 @@ public class DAGEvaluator
     pen.println("After making a DAG, the tree is:\n " + dagRoot);
     DAGEvaluator e = new DAGEvaluator();
     pen.println("Result is " + e.evaluate(dagRoot));
-    
+
     // Experimenting with enum valueOf and ordinal
     int arr[] = { 7, 2, 3 };
     String funName = "sum";
